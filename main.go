@@ -1,23 +1,25 @@
 package main
 
 import (
-	"context"
-	"github.com/gorilla/mux"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/FeelDat/go-testtask/internals/routes"
+	"github.com/gin-gonic/gin"
 	"log"
-	"time"
+	"os"
 )
 
 func main() {
 
 	log.Println("Starting the app")
 
-	router := mux.NewRouter()
-	ctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-	client, _ := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
+	port := os.Getenv("PORT")
 
-	router.HandleFunc()
-	router.HandleFunc()
+	if port == "" {
+		port = "8000"
+	}
 
+	router := gin.New()
+	router.Use(gin.Logger())
+	routes.UserRoutes(router)
+
+	router.Run(":" + port)
 }
